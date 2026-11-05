@@ -114,6 +114,28 @@
   border-color: rgba(192, 57, 43, 0.5) !important;
 }
 
+.input-with-right-icon {
+  padding-right: 36px;
+}
+
+.input-right-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  padding: 2px;
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.input-right-icon:hover {
+  color: var(--color-teal);
+}
+
 .input-wrapper {
   position: relative;
 }

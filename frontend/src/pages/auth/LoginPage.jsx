@@ -1,41 +1,57 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
-import { api } from '../../services/api';
 import '../../styles/auth.css';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '' });
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState({});
+  const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const validate = () => {
+    const e = {};
+    if (!form.email) e.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(form.email)) e.email = 'Enter a valid email';
+    if (!form.password) e.password = 'Password is required';
+    else if (form.password.length < 6) e.password = 'Password must be at least 6 characters';
+    return e;
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setApiError('');
+    const fieldErrors = validate();
+    if (Object.keys(fieldErrors).length) { setErrors(fieldErrors); return; }
+    setErrors({});
     setLoading(true);
     try {
-      const formData = new URLSearchParams();
-      formData.append('username', form.email);
-      formData.append('password', form.password);
-
-      const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1'}/auth/login`, {
+      const body = new URLSearchParams({ username: form.email, password: form.password });
+      const res = await fetch(`${API_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: formData,
+        body,
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || 'Login failed');
-
       login(data.user, data.access_token);
       navigate('/dashboard');
     } catch (err) {
-      setError(err.message);
+      setApiError(err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const set = (field) => (e) => {
+    setForm(f => ({ ...f, [field]: e.target.value }));
+    if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
   };
 
   return (
@@ -46,40 +62,55 @@ export default function LoginPage() {
           <div className="auth-logo-sub">Employee Onboarding Platform</div>
         </div>
 
-        <div className="auth-title">Welcome back</div>
-        <div className="auth-subtitle">Sign in to your account</div>
+        <h2 className="auth-title">Welcome back</h2>
+        <p className="auth-subtitle">Sign in to continue to your workspace</p>
 
-        {error && <div className="auth-error">{error}</div>}
+        {apiError && (
+          <div className="auth-error">
+            <AlertCircle size={14} style={{ marginRight: 6, flexShrink: 0 }} />
+            {apiError}
+          </div>
+        )}
 
-        <form className="auth-form" onSubmit={handleSubmit}>
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
           <div className="form-group">
-            <label className="form-label">Email</label>
+            <label className="form-label">Email address</label>
             <div className="input-wrapper">
-              <Mail className="input-icon" />
+              <Mail className="input-icon" size={15} />
               <input
-                className="form-input input-with-icon"
+                className={`form-input input-with-icon${errors.email ? ' input-error' : ''}`}
                 type="email"
                 placeholder="you@company.com"
                 value={form.email}
-                onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-                required
+                onChange={set('email')}
+                autoComplete="email"
               />
             </div>
+            {errors.email && <span className="field-error">{errors.email}</span>}
           </div>
 
           <div className="form-group">
             <label className="form-label">Password</label>
             <div className="input-wrapper">
-              <Lock className="input-icon" />
+              <Lock className="input-icon" size={15} />
               <input
-                className="form-input input-with-icon"
-                type="password"
+                className={`form-input input-with-icon input-with-right-icon${errors.password ? ' input-error' : ''}`}
+                type={showPassword ? 'text' : 'password'}
                 placeholder="••••••••"
                 value={form.password}
-                onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
-                required
+                onChange={set('password')}
+                autoComplete="current-password"
               />
+              <button
+                type="button"
+                className="input-right-icon"
+                onClick={() => setShowPassword(v => !v)}
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
+              </button>
             </div>
+            {errors.password && <span className="field-error">{errors.password}</span>}
           </div>
 
           <button className="auth-submit" type="submit" disabled={loading}>
@@ -88,7 +119,7 @@ export default function LoginPage() {
         </form>
 
         <div className="auth-footer">
-          Don't have an account? <Link to="/register">Register</Link>
+          Don't have an account? <Link to="/register">Create one</Link>
         </div>
       </div>
     </div>
