@@ -1,0 +1,52 @@
+:root {
+  --color-ivory: #F5F1E8;
+  --color-teal: #174C45;
+  --color-teal-light: #1e6158;
+  --color-coral: #E98567;
+  --color-white-glass: rgba(255, 255, 255, 0.65);
+  --color-text-primary: #24352F;
+  --color-text-secondary: #78847D;
+  --color-border: rgba(255, 255, 255, 0.75);
+  --color-border-soft: rgba(23, 76, 69, 0.12);
+  --color-bg: #F5F1E8;
+  --color-bg-card: rgba(255, 255, 255, 0.65);
+  --color-bg-sidebar: rgba(255, 255, 255, 0.55);
+
+  --shadow-card: 0 2px 16px rgba(23, 76, 69, 0.08);
+  --shadow-sidebar: 2px 0 20px rgba(23, 76, 69, 0.06);
+
+  --radius-card: 14px;
+  --radius-btn: 8px;
+  --radius-badge: 20px;
+
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+
+input, select, textarea {
+  font-family: var(--font-sans);
+}
