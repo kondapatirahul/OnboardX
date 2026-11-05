@@ -1,0 +1,41 @@
+.dashboard-page { width: 100%; }
+.dashboard-page__header { align-items: flex-end; }
+.dashboard-page__header h1 { font-size: 25px; letter-spacing: -0.55px; }
+.dashboard-eyebrow { display: block; margin-bottom: 7px; color: var(--color-teal); font-size: 10px; font-weight: 700; letter-spacing: 1.25px; }
+.dashboard-refresh { white-space: nowrap; }
+.dashboard-refresh:disabled { cursor: wait; opacity: .65; }
+.dashboard-stats-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 18px; }
+.dashboard-stat-card { min-width: 0; padding: 19px 20px 16px; border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-bg-card); box-shadow: var(--shadow-card); }
+.dashboard-stat-card__top, .dashboard-stat-card__footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.dashboard-stat-card__label { color: var(--color-text-secondary); font-size: 12px; font-weight: 600; }
+.dashboard-stat-card__icon { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 11px; background: rgba(23,76,69,.09); color: var(--color-teal); }
+.dashboard-stat-card--coral .dashboard-stat-card__icon { color: var(--color-coral); background: rgba(233,133,103,.13); }
+.dashboard-stat-card--amber .dashboard-stat-card__icon { color: #ad7437; background: rgba(197,151,83,.14); }
+.dashboard-stat-card__value { margin: 13px 0 9px; color: var(--color-text-primary); font-size: 30px; font-weight: 700; letter-spacing: -1px; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.dashboard-stat-card__footer { color: var(--color-text-secondary); font-size: 11px; }
+.dashboard-stat-card__footer svg { flex: 0 0 auto; color: var(--color-teal); }
+.dashboard-content-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(280px, .85fr); gap: 18px; }
+.department-card, .onboarding-progress-card { min-width: 0; }
+.dashboard-section-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 24px; }
+.dashboard-section-heading h2 { color: var(--color-text-primary); font-size: 14px; font-weight: 700; }
+.dashboard-section-heading p { margin-top: 4px; color: var(--color-text-secondary); font-size: 11.5px; }
+.department-card__total { padding: 5px 9px; border-radius: 20px; background: rgba(23,76,69,.07); color: var(--color-teal); font-size: 10px; font-weight: 600; white-space: nowrap; }
+.department-list { display: flex; flex-direction: column; gap: 19px; }
+.department-row__details { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+.department-row__name { overflow: hidden; color: var(--color-text-primary); font-size: 12px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.department-row__count { color: var(--color-text-secondary); font-size: 11px; font-variant-numeric: tabular-nums; }
+.department-progress, .completion-track { overflow: hidden; height: 7px; border-radius: 10px; background: rgba(23,76,69,.09); }
+.department-progress span, .completion-track span { display: block; height: 100%; border-radius: inherit; background: var(--color-teal); }
+.department-row:nth-child(3n + 2) .department-progress span { background: var(--color-coral); }
+.department-row:nth-child(3n) .department-progress span { background: #c59a60; }
+.dashboard-empty-state { display: flex; min-height: 150px; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--color-text-secondary); text-align: center; }
+.dashboard-empty-state svg { color: var(--color-teal); opacity: .65; }
+.dashboard-empty-state strong { color: var(--color-text-primary); font-size: 12px; }
+.dashboard-empty-state span { max-width: 260px; font-size: 11px; }
+.completion-value { margin: 30px 0 12px; color: var(--color-teal); font-size: 38px; font-weight: 700; letter-spacing: -1.5px; font-variant-numeric: tabular-nums; }
+.completion-track { height: 10px; }
+.completion-track span { background: var(--color-coral); }
+.completion-caption { margin-top: 13px; color: var(--color-text-secondary); font-size: 11px; line-height: 1.6; }
+.dashboard-alert { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 0 16px; padding: 11px 14px; border: 1px solid rgba(192,57,43,.16); border-radius: 10px; background: rgba(233,133,103,.1); color: #9d3f32; font-size: 12px; }
+.dashboard-alert button { border: 0; background: transparent; color: #8d3328; font-size: 12px; font-weight: 700; text-decoration: underline; }
+.dashboard-loading-note { margin-top: 12px; color: var(--color-text-secondary); font-size: 11px; text-align: right; }
