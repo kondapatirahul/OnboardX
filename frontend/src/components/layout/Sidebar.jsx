@@ -13,6 +13,7 @@ const navItems = [
   ]},
   { label: 'People', items: [
     { to: '/employees', icon: Users, label: 'Employees' },
+    { to: '/departments', icon: Building2, label: 'Departments' },
     { to: '/onboarding', icon: ClipboardList, label: 'Onboarding' },
   ]},
   { label: 'Work', items: [
