@@ -1,0 +1,20 @@
+@media (max-width: 1100px) {
+  .dashboard-stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 760px) {
+  .dashboard-content-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .dashboard-page__header { align-items: flex-start; gap: 12px; }
+  .dashboard-page__header h1 { font-size: 21px; }
+  .dashboard-refresh { padding: 7px 10px; font-size: 12px; }
+  .dashboard-stats-grid { gap: 10px; }
+  .dashboard-stat-card { padding: 15px 13px 13px; }
+  .dashboard-stat-card__label { font-size: 10.5px; }
+  .dashboard-stat-card__icon { width: 31px; height: 31px; }
+  .dashboard-stat-card__value { font-size: 25px; }
+  .dashboard-stat-card__footer { font-size: 9.5px; }
+  .page-content { padding: 18px; }
+}
