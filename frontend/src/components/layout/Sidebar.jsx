@@ -2,7 +2,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, ClipboardList, FileText,
   BookOpen, Bell, Calendar, BarChart2, Settings,
-  LogOut, Building2
+  LogOut, Building2, UserRound
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import '../../styles/sidebar.css';
@@ -13,6 +13,7 @@ const navItems = [
   ]},
   { label: 'People', items: [
     { to: '/employees', icon: Users, label: 'Employees' },
+    { to: '/profile', icon: UserRound, label: 'My Profile' },
     { to: '/departments', icon: Building2, label: 'Departments' },
     { to: '/onboarding', icon: ClipboardList, label: 'Onboarding' },
   ]},

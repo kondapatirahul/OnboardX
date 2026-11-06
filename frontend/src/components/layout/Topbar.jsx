@@ -5,6 +5,7 @@ import '../../styles/layout.css';
 const pageTitles = {
   '/dashboard': 'Dashboard',
   '/employees': 'Employees',
+  '/profile': 'My Profile',
   '/onboarding': 'Onboarding',
   '/documents': 'Documents',
   '/training': 'Training',
