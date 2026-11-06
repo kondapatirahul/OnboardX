@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useEffect } from 'react';
+import { api } from '../services/api';
 
 const AuthContext = createContext(null);
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
@@ -13,10 +13,7 @@ export function AuthProvider({ children }) {
     if (!storedToken) { setLoading(false); return; }
 
     // Verify token is still valid by calling /me
-    fetch(`${API_URL}/auth/me`, {
-      headers: { Authorization: `Bearer ${storedToken}` },
-    })
-      .then(res => res.ok ? res.json() : Promise.reject())
+    api.get('/auth/me')
       .then(userData => {
         setUser(userData);
         setToken(storedToken);

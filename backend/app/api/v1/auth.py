@@ -3,7 +3,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.schemas.auth import RegisterRequest, LoginResponse
-from app.services.auth_service import register_user, authenticate_user, build_token_response
+from app.services.auth_service import register_user, authenticate_user, build_token_response, resolve_organization
 from app.core.deps import get_current_user
 from app.models.models import User
 
@@ -12,8 +12,14 @@ router = APIRouter()
 
 @router.post("/register", status_code=201)
 def register(data: RegisterRequest, db: Session = Depends(get_db)):
-    user = register_user(db, data)
-    return {"message": "Account created successfully", "user_id": str(user.id)}
+    user, organization_code = register_user(db, data)
+    return {
+        "message": "Account created successfully",
+        "user_id": str(user.id),
+        "organization_id": str(user.organization_id) if user.organization_id else None,
+        "organization_code": organization_code,
+        "role": user.role.value,
+    }
 
 
 @router.post("/login", response_model=LoginResponse)
@@ -32,3 +38,9 @@ def me(current_user: User = Depends(get_current_user)):
         "is_active": current_user.is_active,
         "organization_id": str(current_user.organization_id) if current_user.organization_id else None,
     }
+
+
+@router.get("/organizations/resolve/{organization_code}")
+def organization_lookup(organization_code: str, db: Session = Depends(get_db)):
+    organization = resolve_organization(db, organization_code)
+    return {"id": str(organization.id), "name": organization.name, "code": organization.slug}
