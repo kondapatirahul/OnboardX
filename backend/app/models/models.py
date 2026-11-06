@@ -524,3 +524,115 @@ class DocumentRetentionExecution(Base):
     executed_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     executed_at = Column(DateTime, default=datetime.utcnow, nullable=False)
     details = Column(Text, nullable=True)
+
+# ─── Performance & Goals Management ──────────────────────────────────────────
+
+class PerformanceGoal(Base):
+    __tablename__ = "performance_goals"
+    __table_args__ = (UniqueConstraint("organization_id", "title", "owner_id", name="uq_performance_goal_owner_title"),)
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    organization_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True)
+    owner_id = Column(UUID(as_uuid=True), ForeignKey("employees.id", ondelete="CASCADE"), nullable=False, index=True)
+    created_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    title = Column(String(240), nullable=False)
+    description = Column(Text, nullable=True)
+    goal_type = Column(String(32), nullable=False, default="individual")
+    status = Column(String(24), nullable=False, default="not_started")
+    priority = Column(String(16), nullable=False, default="medium")
+    progress = Column(Integer, nullable=False, default=0)
+    start_date = Column(DateTime, nullable=True)
+    due_date = Column(DateTime, nullable=True)
+    completed_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class PerformanceKeyResult(Base):
+    __tablename__ = "performance_key_results"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    goal_id = Column(UUID(as_uuid=True), ForeignKey("performance_goals.id", ondelete="CASCADE"), nullable=False, index=True)
+    title = Column(String(240), nullable=False)
+    metric = Column(String(80), nullable=True)
+    start_value = Column(Float, nullable=False, default=0)
+    target_value = Column(Float, nullable=False, default=100)
+    current_value = Column(Float, nullable=False, default=0)
+    weight = Column(Float, nullable=False, default=1)
+    order_index = Column(Integer, nullable=False, default=0)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class PerformanceReviewCycle(Base):
+    __tablename__ = "performance_review_cycles"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    organization_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True)
+    name = Column(String(160), nullable=False)
+    description = Column(Text, nullable=True)
+    cycle_type = Column(String(24), nullable=False, default="quarterly")
+    starts_at = Column(DateTime, nullable=False)
+    ends_at = Column(DateTime, nullable=False)
+    self_review_deadline = Column(DateTime, nullable=True)
+    manager_review_deadline = Column(DateTime, nullable=True)
+    status = Column(String(24), nullable=False, default="draft")
+    created_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class PerformanceReview(Base):
+    __tablename__ = "performance_reviews"
+    __table_args__ = (UniqueConstraint("cycle_id", "employee_id", name="uq_performance_review_cycle_employee"),)
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    organization_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True)
+    cycle_id = Column(UUID(as_uuid=True), ForeignKey("performance_review_cycles.id", ondelete="CASCADE"), nullable=False, index=True)
+    employee_id = Column(UUID(as_uuid=True), ForeignKey("employees.id", ondelete="CASCADE"), nullable=False, index=True)
+    manager_id = Column(UUID(as_uuid=True), ForeignKey("employees.id", ondelete="SET NULL"), nullable=True)
+    self_rating = Column(Float, nullable=True)
+    manager_rating = Column(Float, nullable=True)
+    self_summary = Column(Text, nullable=True)
+    manager_summary = Column(Text, nullable=True)
+    strengths = Column(Text, nullable=True)
+    growth_areas = Column(Text, nullable=True)
+    status = Column(String(24), nullable=False, default="not_started")
+    submitted_at = Column(DateTime, nullable=True)
+    reviewed_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, nullable=False)
+
+
+class PerformanceFeedback(Base):
+    __tablename__ = "performance_feedback"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    organization_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True)
+    review_id = Column(UUID(as_uuid=True), ForeignKey("performance_reviews.id", ondelete="CASCADE"), nullable=False, index=True)
+    author_id = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    feedback_type = Column(String(24), nullable=False, default="peer")
+    rating = Column(Float, nullable=True)
+    strengths = Column(Text, nullable=True)
+    suggestions = Column(Text, nullable=True)
+    is_anonymous = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class PerformanceImprovementPlan(Base):
+    __tablename__ = "performance_improvement_plans"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    organization_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True)
+    employee_id = Column(UUID(as_uuid=True), ForeignKey("employees.id", ondelete="CASCADE"), nullable=False, index=True)
+    review_id = Column(UUID(as_uuid=True), ForeignKey("performance_reviews.id", ondelete="SET NULL"), nullable=True)
+    created_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
+    title = Column(String(200), nullable=False)
+    objectives = Column(Text, nullable=False)
+    support_plan = Column(Text, nullable=True)
+    status = Column(String(24), nullable=False, default="active")
+    starts_at = Column(DateTime, nullable=False)
+    ends_at = Column(DateTime, nullable=False)
+    outcome_notes = Column(Text, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
+
+# Explicit relationship used by goal progress updates.
+PerformanceKeyResult.goal = relationship("PerformanceGoal")
