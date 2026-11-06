@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, Users, ClipboardList, FileText,
-  BookOpen, Bell, Calendar, BarChart2, Settings,
+  BookOpen, Bell, Calendar, BarChart2, Settings, Target,
   LogOut, Building2, UserRound
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
@@ -20,6 +20,7 @@ const navItems = [
   { label: 'Work', items: [
     { to: '/documents', icon: FileText, label: 'Documents' },
     { to: '/training', icon: BookOpen, label: 'Training' },
+    { to: '/performance', icon: Target, label: 'Performance' },
     { to: '/calendar', icon: Calendar, label: 'Calendar' },
   ]},
   { label: 'Insights', items: [
