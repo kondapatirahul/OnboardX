@@ -1,0 +1,6 @@
+import { Layers3, Power, PowerOff } from 'lucide-react';
+
+export default function TemplateList({ templates, onToggle }) {
+  if (!templates.length) return <div className="onboard-empty"><Layers3 size={25} /><strong>No templates yet</strong><span>Create a workflow template to standardize employee onboarding.</span></div>;
+  return <div className="onboard-template-grid">{templates.map((template) => <article className="onboard-template-card" key={template.id}><div className="onboard-template-top"><span className="onboard-template-icon"><Layers3 size={17} /></span><span className={`onboard-pill ${template.is_active ? 'is-active' : 'is-muted'}`}>{template.is_active ? 'Active' : 'Inactive'}</span></div><h3>{template.name}</h3><p>{template.description || 'No description provided.'}</p><div className="onboard-template-meta"><span>{template.stages?.length ?? 0} stages</span><button type="button" className="onboard-text-action" onClick={() => onToggle(template)}>{template.is_active ? <PowerOff size={14} /> : <Power size={14} />}{template.is_active ? 'Deactivate' : 'Activate'}</button></div><ol className="onboard-stage-preview">{(template.stages || []).slice(0, 3).map((stage) => <li key={stage.id}>{stage.name}</li>)}{template.stages?.length > 3 && <li className="onboard-more">+{template.stages.length - 3} more stages</li>}</ol></article>)}</div>;
+}
