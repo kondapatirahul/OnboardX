@@ -9,12 +9,14 @@ import DepartmentsPage from './pages/DepartmentsPage';
 import ProfilePage from './pages/ProfilePage';
 import OnboardingPage from './pages/OnboardingPage';
 import PlaceholderPage from './pages/PlaceholderPage';
+import LandingPage from './pages/LandingPage';
 
 export default function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <Routes>
+          <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
 
@@ -33,8 +35,7 @@ export default function App() {
             <Route path="/settings" element={<PlaceholderPage title="Settings" />} />
           </Route>
 
-          <Route path="/" element={<Navigate to="/dashboard" replace />} />
-          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AuthProvider>
     </BrowserRouter>
