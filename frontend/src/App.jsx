@@ -7,6 +7,7 @@ import DashboardPage from './pages/dashboard/DashboardPage';
 import EmployeesPage from './pages/EmployeesPage';
 import DepartmentsPage from './pages/DepartmentsPage';
 import ProfilePage from './pages/ProfilePage';
+import OnboardingPage from './pages/OnboardingPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 
 export default function App() {
@@ -22,7 +23,7 @@ export default function App() {
             <Route path="/employees" element={<EmployeesPage />} />
             <Route path="/departments" element={<DepartmentsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/onboarding" element={<PlaceholderPage title="Onboarding" />} />
+            <Route path="/onboarding" element={<OnboardingPage />} />
             <Route path="/documents" element={<PlaceholderPage title="Documents" />} />
             <Route path="/training" element={<PlaceholderPage title="Training" />} />
             <Route path="/calendar" element={<PlaceholderPage title="Calendar" />} />
