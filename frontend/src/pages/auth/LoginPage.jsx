@@ -2,9 +2,9 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { api } from '../../services/api';
 import '../../styles/auth.css';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api/v1';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -32,14 +32,10 @@ export default function LoginPage() {
     setErrors({});
     setLoading(true);
     try {
-      const body = new URLSearchParams({ username: form.email, password: form.password });
-      const res = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body,
+      const data = await api.postUrlEncoded('/auth/login', {
+        username: form.email.trim().toLowerCase(),
+        password: form.password,
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || 'Login failed');
       login(data.user, data.access_token);
       navigate('/dashboard');
     } catch (err) {
