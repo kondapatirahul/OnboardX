@@ -271,12 +271,17 @@ class TrainingCourse(Base):
     description = Column(Text, nullable=True)
     content_url = Column(String(500), nullable=True)
     duration_minutes = Column(Integer, nullable=True)
+    category = Column(String(80), nullable=True)
+    level = Column(String(24), nullable=False, default="beginner")
+    thumbnail_url = Column(String(1000), nullable=True)
+    published = Column(Boolean, nullable=False, default=False)
     is_mandatory = Column(Boolean, default=False)
     created_by = Column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    assignments = relationship("TrainingAssignment", back_populates="course")
+    assignments = relationship("TrainingAssignment", back_populates="course", cascade="all, delete-orphan")
+    lessons = relationship("TrainingLesson", back_populates="course", cascade="all, delete-orphan", order_by="TrainingLesson.order_index")
 
 
 class TrainingAssignment(Base):
@@ -291,9 +296,59 @@ class TrainingAssignment(Base):
     due_date = Column(DateTime, nullable=True)
     completed_at = Column(DateTime, nullable=True)
     assigned_at = Column(DateTime, default=datetime.utcnow)
+    last_accessed_at = Column(DateTime, nullable=True)
+    assessment_score = Column(Float, nullable=True)
+    certificate_code = Column(String(80), nullable=True, unique=True)
 
     course = relationship("TrainingCourse", back_populates="assignments")
     employee = relationship("Employee", back_populates="training_assignments")
+
+
+class TrainingLesson(Base):
+    __tablename__ = "training_lessons"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    course_id = Column(UUID(as_uuid=True), ForeignKey("training_courses.id", ondelete="CASCADE"), nullable=False, index=True)
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=True)
+    content = Column(Text, nullable=True)
+    resource_url = Column(String(1000), nullable=True)
+    duration_minutes = Column(Integer, nullable=False, default=10)
+    order_index = Column(Integer, nullable=False, default=0)
+    is_preview = Column(Boolean, nullable=False, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    course = relationship("TrainingCourse", back_populates="lessons")
+    progress_records = relationship("TrainingLessonProgress", back_populates="lesson", cascade="all, delete-orphan")
+
+
+class TrainingLessonProgress(Base):
+    __tablename__ = "training_lesson_progress"
+    __table_args__ = (UniqueConstraint("assignment_id", "lesson_id", name="uq_training_assignment_lesson"),)
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    assignment_id = Column(UUID(as_uuid=True), ForeignKey("training_assignments.id", ondelete="CASCADE"), nullable=False, index=True)
+    lesson_id = Column(UUID(as_uuid=True), ForeignKey("training_lessons.id", ondelete="CASCADE"), nullable=False, index=True)
+    is_completed = Column(Boolean, nullable=False, default=False)
+    completed_at = Column(DateTime, nullable=True)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    assignment = relationship("TrainingAssignment")
+    lesson = relationship("TrainingLesson", back_populates="progress_records")
+
+
+class TrainingCertificate(Base):
+    __tablename__ = "training_certificates"
+
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    assignment_id = Column(UUID(as_uuid=True), ForeignKey("training_assignments.id", ondelete="CASCADE"), nullable=False, unique=True)
+    organization_id = Column(UUID(as_uuid=True), ForeignKey("organizations.id", ondelete="CASCADE"), nullable=False, index=True)
+    employee_id = Column(UUID(as_uuid=True), ForeignKey("employees.id", ondelete="CASCADE"), nullable=False, index=True)
+    course_title = Column(String(255), nullable=False)
+    certificate_code = Column(String(80), nullable=False, unique=True, index=True)
+    issued_at = Column(DateTime, nullable=False, default=datetime.utcnow)
+
+    assignment = relationship("TrainingAssignment")
 
 
 # ─── Notification Model ───────────────────────────────────────────────────────

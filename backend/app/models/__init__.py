@@ -20,6 +20,7 @@ from app.models.models import (
     DocumentComment, DocumentRetentionPolicy, DocumentShare, DocumentRetentionExecution,
     TrainingCourse,
     TrainingAssignment,
+    TrainingLesson, TrainingLessonProgress, TrainingCertificate,
     Notification,
     CalendarEvent,
     AuditLog,
@@ -33,6 +34,6 @@ __all__ = [
     "Document", "DocumentReview", "DocumentVersion", "DocumentAccessGrant",
     "DocumentTag", "DocumentActivity", "DocumentComment", "DocumentRetentionPolicy",
     "DocumentShare", "DocumentRetentionExecution",
-    "TrainingCourse", "TrainingAssignment",
+    "TrainingCourse", "TrainingAssignment", "TrainingLesson", "TrainingLessonProgress", "TrainingCertificate",
     "Notification", "CalendarEvent", "AuditLog",
 ]

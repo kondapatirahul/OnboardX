@@ -8,6 +8,7 @@ import EmployeesPage from './pages/EmployeesPage';
 import DepartmentsPage from './pages/DepartmentsPage';
 import ProfilePage from './pages/ProfilePage';
 import OnboardingPage from './pages/OnboardingPage';
+import TrainingPage from './pages/TrainingPage';
 import PlaceholderPage from './pages/PlaceholderPage';
 import LandingPage from './pages/LandingPage';
 
@@ -27,7 +28,7 @@ export default function App() {
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/onboarding" element={<OnboardingPage />} />
             <Route path="/documents" element={<PlaceholderPage title="Documents" />} />
-            <Route path="/training" element={<PlaceholderPage title="Training" />} />
+            <Route path="/training" element={<TrainingPage />} />
             <Route path="/calendar" element={<PlaceholderPage title="Calendar" />} />
             <Route path="/notifications" element={<PlaceholderPage title="Notifications" />} />
             <Route path="/reports" element={<PlaceholderPage title="Reports" />} />
