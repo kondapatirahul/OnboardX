@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.v1 import health, auth, dashboard, employees, departments, profile
+from app.api.v1 import health, auth, dashboard, employees, departments, profile, onboarding
 
 router = APIRouter()
 router.include_router(health.router, prefix="/health", tags=["health"])
@@ -12,3 +12,5 @@ router.include_router(employees.router, prefix="/employees", tags=["employees"])
 router.include_router(departments.router, prefix="/departments", tags=["departments"])
 
 router.include_router(profile.router, prefix="/profile", tags=["profile"])
+
+router.include_router(onboarding.router, prefix="/onboarding", tags=["onboarding"])
